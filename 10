@@ -1,0 +1,54 @@
+
+import sys
+
+def dijkstra(g, src, dest, names):
+    n = len(g)
+    d = [sys.maxsize] * n
+    p = [-1] * n
+    vis = [False] * n
+    d[src] = 0
+
+    for _ in range(n):
+        u = -1
+        for i in range(n):
+            if not vis[i] and (u == -1 or d[i] < d[u]):
+                u = i
+
+        if d[u] == sys.maxsize:
+            break
+
+        vis[u] = True
+
+        for v in range(n):
+            if g[u][v] and not vis[v] and d[u] + g[u][v] < d[v]:
+                d[v] = d[u] + g[u][v]
+                p[v] = u
+
+    path = []
+    while dest != -1:
+        path.append(names[dest])
+        dest = p[dest]
+
+    print("Shortest Path:", " -> ".join(path[::-1]))
+    print("Total Cost:", d[5])
+
+
+names = ['a', 'b', 'c', 'd', 'e', 'z']
+
+g = [
+    [0,4,2,0,0,0],
+    [4,0,1,5,0,0],
+    [2,1,0,8,10,0],
+    [0,5,8,0,2,6],
+    [0,0,10,2,0,5],
+    [0,0,0,6,5,0]
+]
+
+dijkstra(g, 0, 5, names)
+
+
+
+
+---------------
+shortest Path: a -> c -> b -> d -> z
+Total Cost: 14
